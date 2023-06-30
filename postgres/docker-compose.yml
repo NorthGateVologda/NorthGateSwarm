@@ -1,0 +1,34 @@
+version: '3.9'
+services:
+  postgres:
+    container_name: postgres
+    image: postgis/postgis:latest
+    environment:
+      - POSTGRES_DB=northgate
+      - POSTGRES_USER=<username>
+      - POSTGRES_PASSWORD=<password>
+    volumes:
+      - ~/home/docker_volumes/pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - postgres
+  pgadmin:
+    container_name: pgadmin
+    image: dpage/pgadmin4
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=<email>
+      - PGADMIN_DEFAULT_PASSWORD=<password>
+      - PGADMIN_ENABLE_TLS=True
+    volumes:
+      - ~/home/docker_volumes/pgadmin:/var/lib/pgadmin
+      - ~/home/docker_volumes/certs/server.crt:/certs/server.cert
+      - ~/home/docker_volumes/certs/server.key:/certs/server.key
+      - /tmp/servers.json:/pgadmin4/servers.json
+    ports:
+      - "5050:443"
+    networks:
+      - postgres
+networks:
+  postgres:
+    driver: bridge
