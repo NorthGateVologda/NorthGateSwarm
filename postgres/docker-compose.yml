@@ -1,34 +1,49 @@
 version: '3.9'
 services:
   postgres:
-    container_name: postgres
     image: postgis/postgis:latest
     environment:
-      - POSTGRES_DB=northgate
-      - POSTGRES_USER=<username>
-      - POSTGRES_PASSWORD=<password>
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+    secrets:
+      - DB_NAME
+      - DB_USER
+      - DB_PASSWORD
     volumes:
-      - ~/home/docker_volumes/pgdata:/var/lib/postgresql/data
+      - /home/docker_volumes/pgdata:/var/lib/postgresql/data
     ports:
       - "5432:5432"
     networks:
-      - postgres
+      - database
   pgadmin:
-    container_name: pgadmin
     image: dpage/pgadmin4
     environment:
-      - PGADMIN_DEFAULT_EMAIL=<email>
-      - PGADMIN_DEFAULT_PASSWORD=<password>
+      - PGADMIN_DEFAULT_EMAIL=${PGADMIN_EMAIL}
+      - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_PASSWORD}
       - PGADMIN_ENABLE_TLS=True
+    secrets:
+      - PGADMIN_EMAIL
+      - PGADMIN_PASSWORD
     volumes:
-      - ~/home/docker_volumes/pgadmin:/var/lib/pgadmin
-      - ~/home/docker_volumes/certs/server.crt:/certs/server.cert
-      - ~/home/docker_volumes/certs/server.key:/certs/server.key
-      - /tmp/servers.json:/pgadmin4/servers.json
+      - /home/docker_volumes/pgadmin:/var/lib/pgadmin
+      - /home/docker_volumes/certs/server.crt:/certs/server.cert
+      - /home/docker_volumes/certs/server.key:/certs/server.key
     ports:
       - "5050:443"
     networks:
-      - postgres
+      - database
 networks:
-  postgres:
-    driver: bridge
+  database:
+    driver: overlay
+secrets:
+  DB_NAME:
+    external: true
+  DB_USER:
+    external: true
+  DB_PASSWORD:
+    external: true
+  PGADMIN_EMAIL:
+    external: true
+  PGADMIN_PASSWORD:
+    external: true
