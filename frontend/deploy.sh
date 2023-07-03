@@ -1,6 +1,6 @@
 #!/bin/bash
 
-read -p "Все файлы в директории /home/docker_volumes/frotnend будут удалены. Вы хотите продолжить? (y/n): " response
+read -p "Все файлы в директории /home/docker_volumes/frontend будут удалены. Вы хотите продолжить? (y/n): " response
 
 if [[ $response =~ ^[Yy]$ ]]; then
     # Создаём директорию для хранения данных
