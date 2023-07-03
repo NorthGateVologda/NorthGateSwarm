@@ -1,0 +1,14 @@
+version: '3.9'
+services:
+  frontend:
+    image: northgatefrontend-frontend:latest
+    volumes:
+      - /home/docker_volumes/frontend:/app
+      - '/app/node_modules'
+    ports:
+      - "3001:3000"
+    networks:
+      - web
+networks:
+  web:
+    driver: overlay
