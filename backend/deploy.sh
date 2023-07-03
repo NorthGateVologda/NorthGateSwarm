@@ -1,21 +1,32 @@
 #!/bin/bash
 
-# Чтение пути от пользователя
-echo "Введите путь к исходным файлам backend:"
-read path
+read -p "Все файлы в директории /home/docker_volumes/backend будут удалены. Вы хотите продолжить? (y/n): " response
 
-# Копируем исходные файлы
-sudo cp -r $path docker-build-context
-sudo cp Dockerfile docker-build-context
+if [[ $response =~ ^[Yy]$ ]]; then
+    # Создаём директорию для хранения данных
+    sudo mkdir /home/docker_volumes/backend
+    sudo rm -r /home/docker_volumes/backend/*
 
-# Собираем образ
-sudo docker build -t northgatebackend-backend:latest docker-build-context/
+    # Чтение пути от пользователя
+    echo "Введите путь к исходным файлам backend:"
+    read path
 
-# Удаляем директорию
-sudo rm -rf docker-build-context
+    # Удаляем образ, если он есть
+    sudo docker stack rm backend
+    sudo docker image rm northgatebackend-backend:latest -f
 
-# Читаем все секреты Docker
-source ../secrets.sh
+    # Копируем исходные файлы
+    sudo cp -r $path/* /home/docker_volumes/backend/
+    sudo cp Dockerfile /home/docker_volumes/backend/
 
-# Создаем стэк контейнеров
-sudo docker stack deploy --compose-file docker-compose.yml backend
+    # Собираем образ
+    sudo docker build -t northgatebackend-backend:latest /home/docker_volumes/backend
+
+    # Читаем все секреты Docker
+    source ../secrets.sh
+
+    # Создаем стэк контейнеров
+    sudo docker stack deploy --compose-file docker-compose.yml backend
+else
+    echo "Операция отменена."
+fi

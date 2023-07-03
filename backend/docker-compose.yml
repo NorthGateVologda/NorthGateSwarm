@@ -9,6 +9,37 @@ services:
       - "8000:8000"
     networks:
       - backend
+    environment:
+      - BACKEND_SECRET_KEY=/run/secrets/BACKEND_SECRET_KEY
+      - BACKEND_DB_NAME=/run/secrets/BACKEND_DB_NAME
+      - BACKEND_DB_USER=/run/secrets/BACKEND_DB_USER
+      - BACKEND_DB_PASSWORD=/run/secrets/BACKEND_DB_PASSWORD
+      - BACKEND_DB_HOST=/run/secrets/BACKEND_DB_HOST
+      - BACKEND_DB_PORT=/run/secrets/BACKEND_DB_PORT
+      - BACKEND_ENVIRONMENT=/run/secrets/BACKEND_ENVIRONMENT
+    secrets:
+      - BACKEND_SECRET_KEY
+      - BACKEND_DB_NAME
+      - BACKEND_DB_USER
+      - BACKEND_DB_PASSWORD
+      - BACKEND_DB_HOST
+      - BACKEND_DB_PORT
+      - BACKEND_ENVIRONMENT
 networks:
   backend:
     driver: overlay
+secrets:
+  BACKEND_SECRET_KEY:
+    external: true
+  BACKEND_DB_NAME:
+    external: true
+  BACKEND_DB_USER:
+    external: true
+  BACKEND_DB_PASSWORD:
+    external: true
+  BACKEND_DB_HOST:
+    external: true
+  BACKEND_DB_PORT:
+    external: true
+  BACKEND_ENVIRONMENT:
+    external: true 

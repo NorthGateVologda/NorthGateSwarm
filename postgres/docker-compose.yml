@@ -3,13 +3,13 @@ services:
   postgres:
     image: postgis/postgis:latest
     environment:
-      - POSTGRES_DB=${DB_NAME}
-      - POSTGRES_USER=${DB_USER}
-      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DATABASE_DB_NAME}
+      - POSTGRES_USER=${DATABASE_DB_USER}
+      - POSTGRES_PASSWORD=${DATABASE_DB_PASSWORD}
     secrets:
-      - DB_NAME
-      - DB_USER
-      - DB_PASSWORD
+      - DATABASE_DB_NAME
+      - DATABASE_DB_USER
+      - DATABASE_DB_PASSWORD
     volumes:
       - /home/docker_volumes/pgdata:/var/lib/postgresql/data
     ports:
@@ -19,12 +19,12 @@ services:
   pgadmin:
     image: dpage/pgadmin4
     environment:
-      - PGADMIN_DEFAULT_EMAIL=${PGADMIN_EMAIL}
-      - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_PASSWORD}
+      - PGADMIN_DEFAULT_EMAIL=${DATABASE_PGADMIN_EMAIL}
+      - PGADMIN_DEFAULT_PASSWORD=${DATABASE_PGADMIN_PASSWORD}
       - PGADMIN_ENABLE_TLS=True
     secrets:
-      - PGADMIN_EMAIL
-      - PGADMIN_PASSWORD
+      - DATABASE_PGADMIN_EMAIL
+      - DATABASE_PGADMIN_PASSWORD
     volumes:
       - /home/docker_volumes/pgadmin:/var/lib/pgadmin
       - /home/docker_volumes/certs/server.crt:/certs/server.cert
@@ -37,13 +37,13 @@ networks:
   database:
     driver: overlay
 secrets:
-  DB_NAME:
+  DATABASE_DB_NAME:
     external: true
-  DB_USER:
+  DATABASE_DB_USER:
     external: true
-  DB_PASSWORD:
+  DATABASE_DB_PASSWORD:
     external: true
-  PGADMIN_EMAIL:
+  DATABASE_PGADMIN_EMAIL:
     external: true
-  PGADMIN_PASSWORD:
+  DATABASE_PGADMIN_PASSWORD:
     external: true
