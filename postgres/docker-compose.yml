@@ -3,9 +3,9 @@ services:
   postgres:
     image: postgis/postgis:latest
     environment:
-      - POSTGRES_DB=${DATABASE_DB_NAME}
-      - POSTGRES_USER=${DATABASE_DB_USER}
-      - POSTGRES_PASSWORD=${DATABASE_DB_PASSWORD}
+      - POSTGRES_DB_FILE=/run/secrets/DATABASE_DB_NAME
+      - POSTGRES_USER_FILE=/run/secrets/DATABASE_DB_USER
+      - POSTGRES_PASSWORD_FILE=/run/secrets/DATABASE_DB_PASSWORD
     secrets:
       - DATABASE_DB_NAME
       - DATABASE_DB_USER
@@ -19,11 +19,10 @@ services:
   pgadmin:
     image: dpage/pgadmin4
     environment:
-      - PGADMIN_DEFAULT_EMAIL=${DATABASE_PGADMIN_EMAIL}
-      - PGADMIN_DEFAULT_PASSWORD=${DATABASE_PGADMIN_PASSWORD}
+      - PGADMIN_DEFAULT_EMAIL=northgate@mail.ru
+      - PGADMIN_DEFAULT_PASSWORD_FILE=/run/secrets/DATABASE_PGADMIN_PASSWORD
       - PGADMIN_ENABLE_TLS=True
     secrets:
-      - DATABASE_PGADMIN_EMAIL
       - DATABASE_PGADMIN_PASSWORD
     volumes:
       - /home/docker_volumes/pgadmin:/var/lib/pgadmin
