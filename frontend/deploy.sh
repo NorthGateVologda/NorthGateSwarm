@@ -12,7 +12,7 @@ if [[ $response =~ ^[Yy]$ ]]; then
     read path
 
     # Удаляем образ, если он есть
-    sudo docker stack rm frontend
+    sudo docker stack rm web
     sudo docker image rm northgatefrontend-frontend:latest -f
 
     # Копируем исходные файлы
@@ -26,7 +26,7 @@ if [[ $response =~ ^[Yy]$ ]]; then
     source ../secrets.sh
 
     # Создаем стэк контейнеров
-    sudo docker stack deploy --compose-file docker-compose.yml frontend
+    sudo docker stack deploy --compose-file docker-compose.yml web
 else
     echo "Операция отменена."
 fi
