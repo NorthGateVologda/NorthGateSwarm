@@ -2,13 +2,16 @@ version: '3.9'
 services:
   backend:
     image: northgatebackend-backend:latest
-    command: sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    restart: always
+    env_file:
+      - /home/configurations/global.env
+      - /home/configurations/backend.env
     volumes:
       - /home/docker_volumes/backend:/backend
     ports:
       - "8000:8000"
     networks:
-      - backend
+      - northgatevologda
     environment:
       - BACKEND_SECRET_KEY=/run/secrets/BACKEND_SECRET_KEY
       - BACKEND_DB_NAME=/run/secrets/BACKEND_DB_NAME
@@ -26,8 +29,8 @@ services:
       - BACKEND_DB_PORT
       - BACKEND_ENVIRONMENT
 networks:
-  backend:
-    driver: overlay
+  northgatevologda:
+    external: true
 secrets:
   BACKEND_SECRET_KEY:
     external: true

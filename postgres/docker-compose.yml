@@ -2,6 +2,7 @@ version: '3.9'
 services:
   postgres:
     image: postgis/postgis:latest
+    restart: always
     environment:
       - POSTGRES_DB_FILE=/run/secrets/DATABASE_DB_NAME
       - POSTGRES_USER_FILE=/run/secrets/DATABASE_DB_USER
@@ -15,9 +16,10 @@ services:
     ports:
       - "5432:5432"
     networks:
-      - database
+      - northgatevologda
   pgadmin:
-    image: dpage/pgadmin4
+    image: dpage/pgadmin4:latest
+    restart: always
     environment:
       - PGADMIN_DEFAULT_EMAIL=northgate@mail.ru
       - PGADMIN_DEFAULT_PASSWORD_FILE=/run/secrets/DATABASE_PGADMIN_PASSWORD
@@ -31,10 +33,12 @@ services:
     ports:
       - "5050:443"
     networks:
-      - database
+      - northgatevologda
+    depends_on:
+      - postgres
 networks:
-  database:
-    driver: overlay
+  northgatevologda:
+    external: true
 secrets:
   DATABASE_DB_NAME:
     external: true

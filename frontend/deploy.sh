@@ -3,6 +3,10 @@
 read -p "Все файлы в директории /home/docker_volumes/frontend будут удалены. Вы хотите продолжить? (y/n): " response
 
 if [[ $response =~ ^[Yy]$ ]]; then
+
+    # Создём сеть, если она не существует
+    sudo docker network create --driver overlay --attachable northgatevologda
+
     # Создаём директорию для хранения данных
     sudo mkdir /home/docker_volumes/frontend
     sudo rm -r /home/docker_volumes/frontend/*
@@ -12,7 +16,7 @@ if [[ $response =~ ^[Yy]$ ]]; then
     read path
 
     # Удаляем образ, если он есть
-    sudo docker stack rm web
+    sudo docker stack rm frontendstack
     sudo docker image rm northgatefrontend-frontend:latest -f
 
     # Копируем исходные файлы
@@ -26,7 +30,7 @@ if [[ $response =~ ^[Yy]$ ]]; then
     source ../secrets.sh
 
     # Создаем стэк контейнеров
-    sudo docker stack deploy --compose-file docker-compose.yml web
+    sudo docker stack deploy --compose-file docker-compose.yml frontendstack
 else
     echo "Операция отменена."
 fi

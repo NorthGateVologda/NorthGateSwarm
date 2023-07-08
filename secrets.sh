@@ -19,4 +19,4 @@ while IFS='=' read -r key value || [[ -n "$line" ]]; do
 
     # Создание Docker секрета
     echo "$value" | sudo docker secret create "$key" -
-done < ../.env
+done < /home/configurations/secrets.env

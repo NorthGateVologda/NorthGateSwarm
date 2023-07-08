@@ -1,5 +1,13 @@
 #!/bin/bash
 
+# Создём сеть, если она не существует
+sudo docker network create --driver overlay --attachable northgatevologda
+
+# Удаляем стек и образ если они существуют
+sudo docker stack rm dbstack
+sudo docker image rm postgis/postgis:latest -f
+sudo docker image rm dpage/pgadmin4:latest -f
+
 # Создаем необходимые директории
 sudo mkdir /home/docker_volumes/
 sudo mkdir /home/docker_volumes/pgadmin/

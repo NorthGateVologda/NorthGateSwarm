@@ -1,0 +1,23 @@
+version: '3.9'
+services:
+  nginx:
+    image: nginx:latest
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /home/docker_volumes/certbot/conf:/etc/letsencrypt
+      - /home/docker_volumes/certbot/www:/var/www/certbot
+    networks:
+      - northgatevologda
+  certbot:
+    image: certbot/certbot:latest
+    volumes:
+      - /home/docker_volumes/certbot/conf:/etc/letsencrypt
+      - /home/docker_volumes/certbot/www:/var/www/certbot
+    networks:
+      - northgatevologda
+networks:
+  northgatevologda:
+    external: true
