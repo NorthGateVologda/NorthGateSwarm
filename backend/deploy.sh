@@ -20,7 +20,7 @@ if [[ $response =~ ^[Yy]$ ]]; then
     echo "Введите путь к исходным файлам backend:"
     read path
 
-    echo "Удаляем стек backend и образ northgatebackend-backend:latest"
+    echo "Удаляем стек backend"
 
     # Удаляем образ, если он есть
     sudo docker stack rm backendstack

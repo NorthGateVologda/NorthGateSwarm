@@ -2,7 +2,6 @@ version: '3.9'
 services:
   backend:
     image: northgatebackend-backend:latest
-    restart: always
     env_file:
       - /home/configurations/global.env
       - /home/configurations/backend.env
