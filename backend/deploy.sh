@@ -24,7 +24,6 @@ if [[ $response =~ ^[Yy]$ ]]; then
 
     # Удаляем образ, если он есть
     sudo docker stack rm backendstack
-    sudo docker image rm northgatebackend-backend:latest -f
 
     echo "Копируем проект и Dockerfile в /home/docker_volumes/backend/"
 

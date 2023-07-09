@@ -15,16 +15,15 @@ if [[ $response =~ ^[Yy]$ ]]; then
     echo "Введите путь к исходным файлам frontend:"
     read path
 
-    # Удаляем образ, если он есть
+    # Удаляем стек, если он есть
     sudo docker stack rm frontendstack
-    sudo docker image rm northgatefrontend-frontend:latest -f
 
     # Копируем исходные файлы
     sudo cp -r $path/* /home/docker_volumes/frontend/
     sudo cp Dockerfile /home/docker_volumes/frontend/
 
     # Собираем образ
-    sudo docker build -t northgatefrontend-frontend:latest /home/docker_volumes/frontend
+    sudo docker build -t northgatefrontend-frontend:latest /home/docker_volumes/frontend/
 
     # Читаем все секреты Docker
     source ../secrets.sh
