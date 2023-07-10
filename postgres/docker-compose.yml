@@ -15,26 +15,25 @@ services:
     ports:
       - "5432:5432"
     networks:
-      - database
+      - northgatevologda
   pgadmin:
-    image: dpage/pgadmin4
+    image: dpage/pgadmin4:latest
     environment:
       - PGADMIN_DEFAULT_EMAIL=northgate@mail.ru
       - PGADMIN_DEFAULT_PASSWORD_FILE=/run/secrets/DATABASE_PGADMIN_PASSWORD
-      - PGADMIN_ENABLE_TLS=True
     secrets:
       - DATABASE_PGADMIN_PASSWORD
     volumes:
       - /home/docker_volumes/pgadmin:/var/lib/pgadmin
-      - /home/docker_volumes/certs/server.crt:/certs/server.cert
-      - /home/docker_volumes/certs/server.key:/certs/server.key
     ports:
-      - "5050:443"
+      - "5050:80"
     networks:
-      - database
+      - northgatevologda
+    depends_on:
+      - postgres
 networks:
-  database:
-    driver: overlay
+  northgatevologda:
+    external: true
 secrets:
   DATABASE_DB_NAME:
     external: true
