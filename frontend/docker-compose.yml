@@ -3,7 +3,7 @@ services:
   frontend:
     image: northgatefrontend-frontend:latest
     environment:
-      - WDS_SOCKET_PORT=3000
+      - WDS_SOCKET_PORT=0
     volumes:
       - /home/docker_volumes/frontend:/app
       - /app/node_modules
