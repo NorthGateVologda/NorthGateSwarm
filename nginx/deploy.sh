@@ -8,6 +8,8 @@ sudo mkdir /home/docker_volumes/certbot/conf/live/
 sudo mkdir /home/docker_volumes/certbot/conf/live/northgatevologda.ru/ # adjust to your domain
 sudo mkdir /home/docker_volumes/certbot/conf/live/api.northgatevologda.ru/
 sudo mkdir /home/docker_volumes/certbot/conf/live/db.northgatevologda.ru/
+sudo mkdir /home/docker_volumes/certbot/conf/live/pgadmin.northgatevologda.ru/
+sudo mkdir /home/docker_volumes/certbot/conf/live/nifi.northgatevologda.ru/
 sudo mkdir /home/docker_volumes/static
 sudo mkdir /home/docker_volumes/media
 
