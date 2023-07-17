@@ -44,4 +44,4 @@ secrets:
   BACKEND_DB_PORT:
     external: true
   BACKEND_ENVIRONMENT:
-    external: true 
+    external: true
