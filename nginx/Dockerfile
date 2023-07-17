@@ -1,3 +1,7 @@
-FROM nginx
+FROM nginx:1.25.1
 
-COPY default.conf /etc/nginx/conf.d/default.conf
+COPY options-ssl-nginx.conf \
+        ssl-dhparams.pem \
+        default.conf \
+        certs/ \
+        /etc/nginx/conf.d/

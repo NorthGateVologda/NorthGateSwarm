@@ -3,6 +3,9 @@ persistentdata/*
 .pg-env
 locals.py
 *.swp
+*.pem
+!ssl-dhparams.pem
+nginx/certs/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
