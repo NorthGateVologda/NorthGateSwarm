@@ -2,4 +2,4 @@
 
 # Скрипт должен запускаться с sudo
 
-nginx/udeploy.sh
+bash nginx/udeploy.sh

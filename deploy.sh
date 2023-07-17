@@ -8,4 +8,4 @@
 #sudo docker stack deploy --compose-file backend/docker-compose.yml backend
 #sudo docker stack deploy --compose-file frontend/docker-compose.yml frontend
 
-nginx/deploy.sh
+bash nginx/deploy.sh
