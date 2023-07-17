@@ -3,10 +3,20 @@
 Здесь содержатся все необходимые файлы для разворачивания инфрастрктуры
 
 Директории:
-- [postgres](postgres/) конфигурация `Docker` стека для базы данных
+
 - [backend](backend/) конфигурация `Docker` стека `backend`-а
+- [frontend](frontend/) конфигурация `Docker` стека `frontend`-а
+- [postgres](postgres/) конфигурация `Docker` стека для базы данных
+- [nifi](nifi/) конфигурация `Docker` стека `Nifi`
 - [nginx](nginx/) конфигурация `Docker` стека центрального прокси
-- [nifi](nifi/) конфигурация `Docker` стека Nifi
+
+## Содержание
+
+- [NorthGateSwarm](#northgateswarm)
+- [Содержание](#содержание)
+- [Инструкция](#инструкция)
+  - [Nginx](#nginx)
+  - [Развёрстка](#развёрстка)
 
 ## Инструкция
 
@@ -22,6 +32,28 @@ DB_PASSWORD=vasya123
 PGADMIN_EMAIL=vasya@mail.ru
 PGADMIN_PASSWORD=vasya123
 ```
+
+### Nginx
+
+Для сборки образа `nginx` вам будет необходимо добавить папку с сертификатами
+Папка должны содержать список файлов без какой либо древовидной структуры.
+В папке должны быть следующие файлы, где `*.pri.pem` это личные ключи, а
+просто `*.pem` это сами сертификаты. На каждый домен должны быть пара файлов.
+Пара файлов `northgate.ru` являются сертификатами клиента. Найти все
+сертификаты вы сможете в *Хранилище*. Далее необходимый список:
+
+* `northgatevologda.ru.pem`
+* `northgatevologda.ru.pri.pem`
+* `api.northgatevologda.ru.pem`
+* `api.northgatevologda.ru.pri.pem`
+* `db.northgatevologda.ru.pem`
+* `db.northgatevologda.ru.pri.pem`
+* `nifi.northgatevologda.ru.pem`
+* `nifi.northgatevologda.ru.pri.pem`
+* `pgadmin.northgatevologda.ru.pem`
+* `pgadmin.northgatevologda.ru.pri.pem`
+
+### Развёрстка
 
 Для разворачивания кластера сервисов необходимо запустить bash-скрипт с
 помощью команды:
