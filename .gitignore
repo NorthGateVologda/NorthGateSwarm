@@ -1,8 +1,9 @@
 # custom
-default.conf
 persistentdata/*
 .pg-env
 locals.py
+*.swp
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

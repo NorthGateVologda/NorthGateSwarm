@@ -15,7 +15,7 @@ services:
       - northgatevologda
   certbot:
     image: certbot/certbot:latest
-    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'o"
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
     volumes:
       - /home/docker_volumes/certbot/conf:/etc/letsencrypt
       - /home/docker_volumes/certbot/www:/var/www/certbot
