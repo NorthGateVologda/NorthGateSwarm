@@ -10,7 +10,7 @@ services:
       #- /home/docker_volumes/certbot/www:/var/www/certbot
       #- /home/docker_volumes/static:/var/www/static
       #- /home/docker_volumes/media:/var/www/media
-      - conf:/etc/nginx/conf.d/
+      - config:/etc/nginx/conf.d/
     networks:
       - northgatevologda
   #certbot:
@@ -21,6 +21,8 @@ services:
   #    - /home/docker_volumes/certbot/www:/var/www/certbot
   #  networks:
   #    - northgatevologda
+volumes:
+  config:
 networks:
   northgatevologda:
     external: true
