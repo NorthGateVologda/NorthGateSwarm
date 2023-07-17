@@ -1,15 +1,31 @@
 version: '3.9'
 services:
   nifi:
-    image: apache/nifi:latest
+    image: apache/nifi:1.22.0
     ports:
-      - "8181:8181"
-    environment:
-      - NIFI_WEB_HTTP_PORT=8181
+      - "8443:8443"
+    #environment:
+    #  - NIFI_WEB_HTTP_PORT=8181
     volumes:
-      - /home/docker_volumes/nifi:/opt/nifi/nifi-current/ls-target
+      - nifi_logs:/opt/nifi/nifi-current/logs
+      - nifi_conf:/opt/nifi/nifi-current/conf
+      - nifi_db:/opt/nifi/nifi-current/database_repository
+      - nifi_flow:/opt/nifi/nifi-current/flowfile_repository
+      - nifi_cont:/opt/nifi/nifi-current/content_repository
+      - nifi_prov:/opt/nifi/nifi-current/provenance_repository
+      - nifi_state:/opt/nifi/nifi-current/state
+      - "/etc/timezone:/etc/timezone:ro"
+      - "/etc/localtime:/etc/localtime:ro"
     networks:
       - northgatevologda
+volumes:
+  nifi_logs:
+  nifi_conf:
+  nifi_db:
+  nifi_flow:
+  nifi_cont:
+  nifi_prov:
+  nifi_state:
 networks:
   northgatevologda:
     external: true
