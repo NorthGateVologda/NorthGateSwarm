@@ -22,9 +22,18 @@
 - [Инициализация](#инициализация)
 - [Секреты](#секреты)
 - [Fronend](#fronend)
+- [Backend](#backend)
 - [Nifi](#nifi)
 - [Nginx](#nginx)
 - [Развёрстка](#развёрстка)
+
+> TODO: интегрировать репозитории frontend-а и backend-а в образы целевых
+> Dockerfile-ов и настроить `CI` для автогенерации контейнера вокруг
+> исходников. Скорее всего будет целесообразно раскидать Dockerfile-ы
+> привязанные к конкретным репозитриям по этим репозиториям, тем самым
+> облегчив настройку CI. В данном репозитории Swarm останутся только те
+> Dockerfile-ы для которых нет отдельного репозитория и конфигурация стеков,
+> или одного стека в виде docker-compose.yml
 
 ## Сертификаты
 
@@ -58,7 +67,7 @@ PGADMIN_PASSWORD=vasya123
 
 Для фронтенда скачайте репозиторий с кодом в папку `/opt/frontend`. На данном
 этапе вы можете сделать это с помощью `git clone`. Скопируйте из скаченного
-проекта следующие файлы `package.json` и `package-lock.json` в папку
+проекта следующие файлы: `package.json` и `package-lock.json` в папку
 `frontend/` в данном репозитории:
 
 ```sh
@@ -67,14 +76,6 @@ cp /opt/frontend/package-lock.json .
 ```
 
 Запустите сборку и загрузку: `sudo bash deploy.sh`.
-
-> TODO: интегрировать репозиторий в образ Docker-а и настроить `CI` для
-> автогенерации контейнера вокруг исходников. Скорее всего будет целесообразно
-> раскидать Dockerfile-ы привязанные к конкретным репозитриям по этим
-> репозиториям, тем самым облегчив настройку CI. В этом же репозитории:
-> Swarm останутся только те Dockerfile-ы для которых нет отдельного
-> репозитория и конфигурация стеков, или одного стека в виде
-> docker-compose.yml
 
 > TODO: разобраться со следующим предупреждением во время сборки образа:
 
@@ -85,6 +86,27 @@ npm notice Changelog: <https://github.com/npm/cli/releases/tag/v9.8.0>
 npm notice Run `npm install -g npm@9.8.0` to update!
 npm notice
 ```
+
+## Backend
+
+Здесь с помощью `docker-compose.yml` поднимается кластер сервисов `Docker`
+для обеспечения работы backend на сервере.
+
+При работе необходимо учесть то, что в `docker-compose.yml` используются
+`Docker secrets`, о чём описано выше.
+
+Важно, для успешного развертывания необходимо иметь локальный образ
+`backend`-а с названием `nf_backend`.
+
+Скачайте репозиторий с кодом в папку `/opt/backend`. На данном
+этапе вы можете сделать это с помощью `git clone`. Скопируйте из скаченного
+проекта файл `requirements/prod.txt` в папку `backend/` в данном репозитории.
+
+```sh
+cp /opt/backend/requirements/prod.txt .
+```
+
+Запустите сборку и загрузку: `sudo bash deploy.sh`.
 
 ## Nifi
 
@@ -142,6 +164,7 @@ npm notice
 * `alias deploy='sudo bash deploy.sh'`
 * `alias undeploy='sudo bash undeploy.sh'`
 * `alias dockerlog='sudo tail -f /var/log/messages | grep docker'`
+* `alias niflg='sudo ls /var/lib/docker/volumes/nifi_logs/_data/nifi-app.log'`
 
 Общие скрипты `deploy.sh` и `undeploy.sh` были удалены из корня проекта, так
 как не все сервисы поднимаются в рамках *Улья*. `Nifi` поднимается с помощью

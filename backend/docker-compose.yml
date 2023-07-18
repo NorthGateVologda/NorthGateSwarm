@@ -1,12 +1,14 @@
 version: '3.9'
 services:
   backend:
-    image: northgatebackend-backend:latest
+    image: ng_backend:latest
     env_file:
-      - /home/configurations/global.env
-      - /home/configurations/backend.env
+      - global.env
+      - backend.env
     volumes:
-      - /home/docker_volumes/backend:/backend
+      - /opt/backend/apps:/backend/apps
+      - /opt/backend/config:/backend/config
+      - /opt/backend/manage.py:/backend/manage.py
     ports:
       - "8000:8000"
     networks:
