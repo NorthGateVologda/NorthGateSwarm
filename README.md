@@ -76,6 +76,16 @@ cp /opt/frontend/package-lock.json .
 > репозитория и конфигурация стеков, или одного стека в виде
 > docker-compose.yml
 
+> TODO: разобраться со следующим предупреждением во время сборки образа:
+
+```
+npm notice
+npm notice New minor version of npm available! 9.7.2 -> 9.8.0
+npm notice Changelog: <https://github.com/npm/cli/releases/tag/v9.8.0>
+npm notice Run `npm install -g npm@9.8.0` to update!
+npm notice
+```
+
 ## Nifi
 
 В идеале нам будет необходимо поднять `Nifi` в рамках `Ngnix` со всеми
@@ -126,10 +136,12 @@ cp /opt/frontend/package-lock.json .
 вызова `bash` с параметром - именем скрипта: `sudo bash deploy.sh`.
 
 Сисадмину рекомендуется создать следующие `alias`-ы для автоматизации
-процесса. `alias` нужно запускать из целевых папок:
+процесса развёрстки и мониторинга. `alias` развёрстки нужно запускать из
+целевых папок:
 
 * `alias deploy='sudo bash deploy.sh'`
 * `alias undeploy='sudo bash undeploy.sh'`
+* `alias dockerlog='sudo tail -f /var/log/messages | grep docker'`
 
 Общие скрипты `deploy.sh` и `undeploy.sh` были удалены из корня проекта, так
 как не все сервисы поднимаются в рамках *Улья*. `Nifi` поднимается с помощью
