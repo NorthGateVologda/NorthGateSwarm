@@ -18,11 +18,13 @@
 
 - [NorthGateSwarm](#northgateswarm)
 - [Содержание](#содержание)
+- [Сетевые порты](#сетевые-порты)
 - [Сертификаты](#сертификаты)
 - [Инициализация](#инициализация)
 - [Секреты](#секреты)
 - [Fronend](#fronend)
 - [Backend](#backend)
+- [База данных](#база-данных)
 - [Nifi](#nifi)
 - [Nginx](#nginx)
 - [Развёрстка](#развёрстка)
@@ -34,6 +36,10 @@
 > облегчив настройку CI. В данном репозитории Swarm останутся только те
 > Dockerfile-ы для которых нет отдельного репозитория и конфигурация стеков,
 > или одного стека в виде docker-compose.yml
+
+## Сетевые порты
+
+Блокировка сетевых портов [происходит][1] на уровне хостинга.
 
 ## Сертификаты
 
@@ -77,7 +83,7 @@ cp /opt/frontend/package-lock.json .
 
 Запустите сборку и загрузку: `sudo bash deploy.sh`.
 
-> TODO: разобраться со следующим предупреждением во время сборки образа:
+> TODO: разобраться со следующим предупреждением во время сборки образа
 
 ```
 npm notice
@@ -106,7 +112,31 @@ npm notice
 cp /opt/backend/requirements/prod.txt .
 ```
 
+> TODO: разобраться со следующим предупреждением во время сборки образа
+
+```
+debconf: delaying package configuration, since apt-utils is not installed
+```
+
+```
+WARNING: Running pip as the 'root' user can result in broken permissions and
+conflicting behaviour with the system package manager. It is recommended to
+use a virtual environment instead: https://pip.pypa.io/warnings/venv
+```
+
 Запустите сборку и загрузку: `sudo bash deploy.sh`.
+
+## База данных
+
+Здесь с помощью `docker-compose.yml` поднимается кластер сервисов `Docker`
+для обеспечения работы базы данных на сервере.
+
+При работе необходимо учесть то, что в `docker-compose.yml` используются
+`Docker secrets`, о чём описано выше.
+
+Также не забудьте создать необходимые директории для привязки постоянного
+хранилища к `Docker`. Все необходимые команды прописаны в
+[EnvironmentWiki][2]
 
 ## Nifi
 
@@ -169,3 +199,6 @@ cp /opt/backend/requirements/prod.txt .
 Общие скрипты `deploy.sh` и `undeploy.sh` были удалены из корня проекта, так
 как не все сервисы поднимаются в рамках *Улья*. `Nifi` поднимается с помощью
 скрипта `run.sh` а удаляется из памяти в ручную.
+
+[1]: https://mcs.mail.ru/app/mcs5568309969/services/infra/firewall
+[2]: https://github.com/NorthGateVologda/NorthGateWiki/blob/main/ENVIRONMENT.md
