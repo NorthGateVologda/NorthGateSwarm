@@ -178,7 +178,30 @@ use a virtual environment instead: https://pip.pypa.io/warnings/venv
 * `pgadmin.northgatevologda.ru.pem`
 * `pgadmin.northgatevologda.ru.pri.pem`
 
-> TODO: реанимировать все настройки, пока работает только fronend
+Обратите особое внимание. Мы записываем конфигурацию `default.conf` при сборке
+образа, но в тоже время папка `/etc/nginx/conf.d` определена как том
+`Docker`-а. Сшштветственно при изменении `default.conf` в рамках проета `Swarm`
+вам необходимо удалить том. В дальнейшем вы можете вносить временные изменнеия
+через том:
+
+```sh
+VFMT='{{ .Mountpoint }}'
+NGINX_CONT=$(sudo docker ps --filter "name=nginx_nginx" -q)
+NGINX_VOLUME=$(sudo docker volume inspect --format "${VFMT}" nginx_config)
+sudo vim $NGINX_VOLUME/default.conf
+sudo docker exec -it $NGINX_CONT /bin/bash
+nginx -s reload
+```
+
+Для удаления тома:
+
+```sh
+sudo docker volume rm nginx_config
+```
+
+> TODO: в будущем решить: оставить конфигурацию как том, и копировать её в
+> контейнер через `docker cp` или же интегрировать её со сбокой образа и
+> отключить том `Docker`-а
 
 ## Развёрстка
 
