@@ -13,6 +13,7 @@ services:
       - modules:/app/node_modules
     ports:
       - "3000:3000"
+    hostname: frontend
     networks:
       - northgatevologda
 volumes:

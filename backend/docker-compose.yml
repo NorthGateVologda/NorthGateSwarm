@@ -11,6 +11,7 @@ services:
       - /opt/backend/manage.py:/backend/manage.py
     ports:
       - "8000:8000"
+    hostname: backend
     networks:
       - northgatevologda
     environment:
