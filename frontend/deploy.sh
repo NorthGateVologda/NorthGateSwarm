@@ -29,7 +29,7 @@ if [[ $response =~ ^[Yy]$ ]]; then
     source ../secrets.sh
 
     # Создаем стэк контейнеров
-    sudo docker stack deploy --compose-file docker-compose.yml frontendstack
+    sudo docker stack deploy --compose-file docker-compose.yml frontend
 else
     echo "Операция отменена."
 fi

@@ -5,12 +5,17 @@ services:
     environment:
       - WDS_SOCKET_PORT=443
     volumes:
-      - /home/docker_volumes/frontend:/app
-      - /app/node_modules
+      - /opt/frontend:/app
+      # Старайтесь избегать анонимных томов
+      # Они плодятся а потом теряются с командой
+      # docker volume prune
+      - modules:/app/node_modules
     ports:
       - "3000:3000"
     networks:
       - northgatevologda
+volumes:
+  modules:
 networks:
   northgatevologda:
     external: true
