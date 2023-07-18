@@ -2,7 +2,7 @@
 
 # Скрипт необходимо запустить через sudo
 
-# Строим образ и деплоим стек
+# Собираем образ и деплоим стек
 # Префикс ng_* в данном случае - NorthGate
 docker build -t ng_nginx:latest .
 docker stack deploy --compose-file docker-compose.yml nginx
