@@ -5,7 +5,8 @@ services:
     environment:
       - WDS_SOCKET_PORT=443
     volumes:
-      - /opt/frontend:/app
+      - /opt/frontend/src:/app/src
+      - /opt/frontend/public:/app/public
       # Старайтесь избегать анонимных томов
       # Они плодятся а потом теряются с командой
       # docker volume prune

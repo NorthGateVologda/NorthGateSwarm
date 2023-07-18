@@ -4,9 +4,11 @@ persistentdata/*
 locals.py
 *.swp
 *.pem
+secrets.env
 !nginx/ssl-dhparams.pem
 nginx/certs/
-secrets.env
+frontend/package.json
+frontend/package-lock.json
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
