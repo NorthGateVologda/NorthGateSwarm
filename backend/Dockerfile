@@ -1,3 +1,4 @@
+# Очень хорошо, что зафиксировали версию!
 FROM python:3.9
 
 ENV PYTHONUNBUFFERED 1

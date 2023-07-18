@@ -12,3 +12,6 @@ docker run --rm -d -p 8443:8443 \
     -v nifi_prov:/opt/nifi/nifi-current/provenance_repository \
     -v nifi_state:/opt/nifi/nifi-current/state \
     apache/nifi:1.21.0
+# Старайтесь всегда виксировать версию!
+# Через месяц в latest могут внести такие изменения, коорые погубят всё
+# приложение и мы можем потратить очень много времени на поиск причины
