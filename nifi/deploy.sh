@@ -3,9 +3,10 @@
 # Скрипт необходимо запустить через sudo
 
 docker run --rm -d \
-    --name "nifi" \
-    -p "8443:8443" \
+    --name nifi \
+    --network northgatevologda \
     -h northgatevologda.ru \
+    -p 8443:8443 \
     -v nifi_logs:/opt/nifi/nifi-current/logs \
     -v nifi_conf:/opt/nifi/nifi-current/conf \
     -v nifi_db:/opt/nifi/nifi-current/database_repository \
