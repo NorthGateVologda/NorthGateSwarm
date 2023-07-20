@@ -4,8 +4,8 @@
 
 docker run --rm -d \
     --name nifi \
-    --network northgatevologda \
-    -h northgatevologda.ru \
+    --network nifi \
+    -h nifi.northgatevologda.ru \
     -p 8443:8443 \
     -v nifi_logs:/opt/nifi/nifi-current/logs \
     -v nifi_conf:/opt/nifi/nifi-current/conf \
@@ -14,6 +14,7 @@ docker run --rm -d \
     -v nifi_cont:/opt/nifi/nifi-current/content_repository \
     -v nifi_prov:/opt/nifi/nifi-current/provenance_repository \
     -v nifi_state:/opt/nifi/nifi-current/state \
+    -v /opt/nifi/input:/opt/input \
     apache/nifi:1.21.0
 # Старайтесь всегда виксировать версию!
 # Через месяц в latest могут внести такие изменения, которые погубят всё
