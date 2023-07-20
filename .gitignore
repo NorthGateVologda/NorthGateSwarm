@@ -1,8 +1,16 @@
 # custom
-default.conf
 persistentdata/*
 .pg-env
 locals.py
+*.swp
+*.pem
+secrets.env
+!nginx/ssl-dhparams.pem
+nginx/certs/
+frontend/package.json
+frontend/package-lock.json
+backend/prod.txt
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
