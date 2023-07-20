@@ -10,7 +10,7 @@
 - [nifi](nifi/) конфигурация `Docker` стека `Nifi`
 - [nginx](nginx/) конфигурация `Docker` стека центрального прокси
 
-> TODO: подумать над тем, чтобы все сервисы объединить в один стек,
+> TODO: подумать над тем, стоит ли все сервисы объединить в один стек,
 > папки при этом можно оставить. В каждой папке будет свой Dockerfile
 > но docker-compose.yml будет один
 
@@ -29,13 +29,16 @@
 - [Nginx](#nginx)
 - [Развёрстка](#развёрстка)
 
-> TODO: интегрировать репозитории frontend-а и backend-а в образы целевых
-> Dockerfile-ов и настроить `CI` для автогенерации контейнера вокруг
-> исходников. Скорее всего будет целесообразно раскидать Dockerfile-ы
-> привязанные к конкретным репозитриям по этим репозиториям, тем самым
-> облегчив настройку CI. В данном репозитории Swarm останутся только те
-> Dockerfile-ы для которых нет отдельного репозитория и конфигурация стеков,
-> или одного стека в виде docker-compose.yml
+> TODO: интегрировать репозитории `frontend`-а и `backend`-а в образы целевых
+> `Dockerfile`-ов и настроить `CI` для автогенерации контейнера вокруг
+> исходников. Скорее всего будет целесообразно раскидать `Dockerfile`-ы
+> привязанные к целевым репозитриям по этим репозиториям, тем самым
+> облегчив настройку `CI`. В данном репозитории (`Swarm`) останутся только те
+> `Dockerfile`-ы для которых нет отдельного репозитория, так же останется
+> конфигурация стеков, или же одного стека в виде единого
+> `docker-compose.yml`. Файлы стеков будут тянуть образы целевых проектов из
+> репозитория образов на `GitHub`-е, куда эти образы, как было сказано выше
+> будут попадать по средствам системы `CI` из сборки самих целевых проектов.
 
 ## Сетевые порты
 
@@ -43,7 +46,20 @@
 
 ## Сертификаты
 
-> TODO: вернуть интеграцию с certbot и заполнить главу
+> TODO: вернуть интеграцию с `certbot` и заполнить главу
+
+На данный момент ответственные коллеги создали для нас следующие сертификаты:
+
+* `northgatevologda.ru.pem`
+* `northgatevologda.ru.pri.pem`
+* `api.northgatevologda.ru.pem`
+* `api.northgatevologda.ru.pri.pem`
+* `db.northgatevologda.ru.pem`
+* `db.northgatevologda.ru.pri.pem`
+* `nifi.northgatevologda.ru.pem`
+* `nifi.northgatevologda.ru.pri.pem`
+* `pgadmin.northgatevologda.ru.pem`
+* `pgadmin.northgatevologda.ru.pri.pem`
 
 ## Инициализация
 
@@ -66,8 +82,8 @@ PGADMIN_EMAIL=vasya@mail.ru
 PGADMIN_PASSWORD=vasya123
 ```
 
-Затем запустите файл `secrets.sh` с `sudo` и скоре всего передав как
-параметр команде `bash`: `sudo bash secrets.sh`
+Затем запустите файл `secrets.sh` с `sudo` передав его как параметр команде
+`bash`: `sudo bash secrets.sh`
 
 ## Fronend
 
@@ -93,16 +109,15 @@ npm notice Run `npm install -g npm@9.8.0` to update!
 npm notice
 ```
 
+Локальный образ `frontend`-а называется `ng_frontend`.
+
 ## Backend
 
 Здесь с помощью `docker-compose.yml` поднимается кластер сервисов `Docker`
-для обеспечения работы backend на сервере.
+для обеспечения работы `backend` на сервере.
 
 При работе необходимо учесть то, что в `docker-compose.yml` используются
 `Docker secrets`, о чём описано выше.
-
-Важно, для успешного развертывания необходимо иметь локальный образ
-`backend`-а с названием `nf_backend`.
 
 Скачайте репозиторий с кодом в папку `/opt/backend`. На данном
 этапе вы можете сделать это с помощью `git clone`. Скопируйте из скаченного
@@ -112,11 +127,14 @@ npm notice
 cp /opt/backend/requirements/prod.txt .
 ```
 
-> TODO: разобраться со следующим предупреждением во время сборки образа
+> TODO: разобраться со следующим предупреждением во время сборки образа:
 
 ```
 debconf: delaying package configuration, since apt-utils is not installed
 ```
+
+> TODO: добавить отдельного пользователя в рамках образа `Docker` или
+> заигнорировать следующее предупреждение:
 
 ```
 WARNING: Running pip as the 'root' user can result in broken permissions and
@@ -125,6 +143,8 @@ use a virtual environment instead: https://pip.pypa.io/warnings/venv
 ```
 
 Запустите сборку и загрузку: `sudo bash deploy.sh`.
+
+Локальный образ `backend`-а называется `nf_backend`.
 
 ## База данных
 
@@ -148,8 +168,9 @@ use a virtual environment instead: https://pip.pypa.io/warnings/venv
 сертификата и экспортируется через порт `8443`. `Docker Swarm` не в состоянии
 переварить такую настройку. Скорее всего в свете ограничений накладываемых
 механизмами безопасности. Отказаться от `TLS` используя `NIFI_WEB_HTTP_PORT`,
-как уже было сказанно, не целессобразно, так как `Nifi` будучи в публичном
-доступе может стать целью злоумышлеников.
+как уже было сказанно, не целессобразно, так как это бы означала доступ к
+системе без аутентификации, что в свою очередь предоставило бы публичный
+доступ к `Nifi`. Таким образом наша система может стать целью злоумышлеников.
 
 По сему мы решили запускать `Nifi` через команду `docker run -d`. Сделать это
 можно с помощью команды `run.sh` в папке `nifi`.
@@ -165,24 +186,13 @@ use a virtual environment instead: https://pip.pypa.io/warnings/venv
 В папке должны быть следующие файлы, где `*.pri.pem` это личные ключи, а
 просто `*.pem` это сами сертификаты. На каждый домен должны быть пара файлов.
 Пара файлов `northgate.ru` являются сертификатами клиента. Найти все
-сертификаты вы сможете в *Хранилище*. Далее необходимый список:
-
-* `northgatevologda.ru.pem`
-* `northgatevologda.ru.pri.pem`
-* `api.northgatevologda.ru.pem`
-* `api.northgatevologda.ru.pri.pem`
-* `db.northgatevologda.ru.pem`
-* `db.northgatevologda.ru.pri.pem`
-* `nifi.northgatevologda.ru.pem`
-* `nifi.northgatevologda.ru.pri.pem`
-* `pgadmin.northgatevologda.ru.pem`
-* `pgadmin.northgatevologda.ru.pri.pem`
+сертификаты вы сможете в *Хранилище*. Список сертификатов представлен выше.
 
 Обратите особое внимание. Мы записываем конфигурацию `default.conf` при сборке
 образа, но в тоже время папка `/etc/nginx/conf.d` определена как том
-`Docker`-а. Сшштветственно при изменении `default.conf` в рамках проета `Swarm`
-вам необходимо удалить том. В дальнейшем вы можете вносить временные изменнеия
-через том:
+`Docker`-а. Соответственно при изменении `default.conf` в рамках проета
+`Swarm` вам необходимо удалить том. В дальнейшем вы можете вносить временные
+изменнения через том:
 
 ```sh
 VFMT='{{ .Mountpoint }}'
@@ -212,7 +222,7 @@ sudo docker volume rm nginx_config
 
 Сисадмину рекомендуется создать следующие `alias`-ы для автоматизации
 процесса развёрстки и мониторинга. `alias` развёрстки нужно запускать из
-целевых папок:
+целевых папок.
 
 * `alias deploy='sudo bash deploy.sh'`
 * `alias undeploy='sudo bash undeploy.sh'`
