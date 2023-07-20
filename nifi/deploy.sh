@@ -2,7 +2,9 @@
 
 # Скрипт необходимо запустить через sudo
 
-docker run --rm -d -p 8443:8443 \
+docker run --rm -d \
+    --name "nifi" \
+    -p "8443:8443" \
     -h northgatevologda.ru \
     -v nifi_logs:/opt/nifi/nifi-current/logs \
     -v nifi_conf:/opt/nifi/nifi-current/conf \

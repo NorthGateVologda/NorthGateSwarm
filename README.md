@@ -26,6 +26,7 @@
 - [Backend](#backend)
 - [База данных](#база-данных)
 - [Nifi](#nifi)
+  - [Настройка Nifi](#настройка-nifi)
 - [Nginx](#nginx)
 - [Развёрстка](#развёрстка)
 
@@ -179,6 +180,33 @@ use a virtual environment instead: https://pip.pypa.io/warnings/venv
 > для сохранения схем в репозитории.
 > TODO: интегрировать Nifi в существующий стек
 
+Для дальнейшей работы изучите следующие команды:
+
+```sh
+VFMT='{{ .Mountpoint }}'
+NIFI_CONT=$(sudo docker ps --filter "name=nifi" -q)
+NIFI_VOLUME=$(sudo docker volume inspect --format "${VFMT}" nifi_conf)
+# Редактирование настроек Nifi
+sudo vim $NIFI_VOLUME/nifi.properties
+# Подключение к образу Nifi
+sudo docker exec -it $NIFI_CONT /bin/bash
+```
+
+### Настройка Nifi
+
+После первого запуска `Nifi` необходимо произвести некоторую настройку
+используя команды выше. На данном этапе предполагается доступ по механизму
+единого пользователя. далее вместо `[PASSWORD]` поставьте созданный пароль.
+Обязательно держите файл ресурсов актуализированным, а пароль храните только
+в личном пространстве и высылайте только в личных обсуждениях.
+
+1. Убедитесь, что в файле `nifi.properties` указана следующая конфигурация
+   1. `nifi.security.user.login.identity.provider=single-user-provider`
+2. Сгенерируйте пароль для пользователя:
+   1. `tr -dc A-Za-z0-9 </dev/urandom | head -c 13 ; echo ''`
+3. Подключитесь к контейнеру `Nifi` и настройте основного пользователя:
+   1.  `bin/nifi.sh set-single-user-credentials northgate [PASSWORD]`
+
 ## Nginx
 
 Для сборки образа `nginx` вам будет необходимо добавить папку с сертификатами
@@ -202,6 +230,8 @@ sudo vim $NGINX_VOLUME/default.conf
 sudo docker exec -it $NGINX_CONT /bin/bash
 nginx -s reload
 ```
+
+> TODO: вынести все определения переменных через `export` в `.bashrc`
 
 Для удаления тома:
 
@@ -229,9 +259,19 @@ sudo docker volume rm nginx_config
 * `alias dockerlog='sudo tail -f /var/log/messages | grep docker'`
 * `alias niflg='sudo ls /var/lib/docker/volumes/nifi_logs/_data/nifi-app.log'`
 
-Общие скрипты `deploy.sh` и `undeploy.sh` были удалены из корня проекта, так
-как не все сервисы поднимаются в рамках *Улья*. `Nifi` поднимается с помощью
-скрипта `run.sh` а удаляется из памяти в ручную.
+> TODO: Общие скрипты `deploy.sh` и `undeploy.sh` были удалены из корня
+> проекта, так предположительно мы объединим все контейнеры в один стек.
+> Если этого не произойдёт, то можно вренуть главные скрипты развёрстки;
+> Для Nifi вновь появились `deploy.sh` и `undeploy.sh` даже вне
+> `Docker Swarm`-а
+
+Так же рукомендуется внести следующие настройки в файл `~/.vimrc`:
+
+```vim
+:set tabstop=4 softtabstop=0
+:set shiftwidth=4 smarttab
+:set expandtab
+```
 
 [1]: https://mcs.mail.ru/app/mcs5568309969/services/infra/firewall
 [2]: https://github.com/NorthGateVologda/NorthGateWiki/blob/main/ENVIRONMENT.md
