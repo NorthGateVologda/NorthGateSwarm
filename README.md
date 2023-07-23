@@ -487,13 +487,21 @@ openssl verify -untrusted chain.pem fullchain.pem
 3. Подключитесь к контейнеру `Nifi` и настройте основного пользователя:
    1.  `bin/nifi.sh set-single-user-credentials northgate [PASSWORD]`
 
-Для `Nifi` настроена папка `/opt/nifi/input` для вводных файлов, в том числе
-данных из Росреестра.
+Для `Nifi` настроены несколько папок:
+
+* `/opt/nifi/input` - вводные файлы, в том числе данных из Росреестра
+* `/opt/nifi/drivers` - драйвера баз данных
+
+Для взаимодействия с `Postgres`-ом вам необходимо скачать драйвер базы
+данных с [сайта][7]. Формат имени файла: `postgresql-xx.x.x.jar`.
+Положите файл в папку `/opt/nifi/drivers`.
 
 Для загрузки изменений в `Nifi Registry` щёлкните правой кнопкой мыши по
 группе процессоров находящейся под контролем реестра, далее:
 `Version` -> `Commit local changes`. Подробнее об этом можно прочитать
 в [документации][6].
+
+Часто сложно бывает найти [документацию][8] по `Avro`.
 
 Интерфейс системы доступен по адресу:
 `https://nifi.northgatevologda.ru:4883/nifi`.
@@ -506,9 +514,33 @@ openssl verify -untrusted chain.pem fullchain.pem
 в неконсистентном состоянии. На данный момент загрузка из локального
 репозитория на `remote` `GitHub`-а происходит в ручном режиме.
 Папка репозитория находится по пути: `/opt/nifi/NorthGateNifi`.
-Для загрузки изменений на `GitHub` перейдите в папку и выполните `git push`.
+Для загрузки изменений в ручном режиме на `GitHub` перейдите в папку и
+выполните `git push`. Для автоматизации загрузки изменений создан скрипт
+`push.sh` который выполняется в рамках задачи `cron` каждые пол часа.
+Скрипт лежит в папке `/opt/nifi`, там же образовывается не инкрементальный
+лог.
 
-> TODO: настроить автоматическую загрузку изменений в `GitHub`
+```sh
+#!/bin/bash
+# Скрипт необходимо запустить с пользователем opensuse
+cd /opt/nifi/NorthGateNifi
+date > /opt/nifi/push.log
+git push >> /opt/nifi/push.log 2>&1
+```
+
+Задача `cron` в рамках пользователя `opensuse`:
+
+```cron
+0 * * * * /opt/nifi/push.sh
+30 * * * * /opt/nifi/push.sh
+```
+
+Запись хранится в файле: `/var/spool/cron/tabs/opensuse`
+
+> TODO: решить, почему не работает запись `0/30`; Ошибка: `bad minutes`
+
+> TODO: настроить автоматическую загрузку изменений в `GitHub` средствами
+> `Nifi Registry`
 
 Как сказано выше, `Nifi Registry` настроен в безпользовательском режиме
 и в качестве метода ограничения доступа блокируется порт на котором
@@ -554,3 +586,5 @@ openssl verify -untrusted chain.pem fullchain.pem
 [4]: https://github.com/NorthGateVologda/NorthGateWiki/blob/main/ENVIRONMENT.md
 [5]: https://github.com/NorthGateVologda/NorthGateNifi
 [6]: https://nifi.apache.org/docs/nifi-docs/
+[7]: https://jdbc.postgresql.org/download/
+[8]: https://avro.apache.org/docs/1.11.1/specification/

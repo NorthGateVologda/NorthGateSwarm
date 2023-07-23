@@ -14,6 +14,7 @@ docker run --rm -d \
     -v nifi_cont:/opt/nifi/nifi-current/content_repository \
     -v nifi_prov:/opt/nifi/nifi-current/provenance_repository \
     -v nifi_state:/opt/nifi/nifi-current/state \
+    -v /opt/nifi/drivers:/opt/drivers \
     -v /opt/nifi/input:/opt/input \
     apache/nifi:1.21.0
 # Старайтесь всегда виксировать версию!
