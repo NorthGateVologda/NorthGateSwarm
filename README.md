@@ -2,6 +2,8 @@
 
 Здесь содержатся все необходимые файлы для разворачивания инфрастрктуры
 
+> TODO: скорее всего перенести в `Wiki` проекта
+
 Директории:
 
 - [backend](backend/) конфигурация `Docker` стека `backend`-а
@@ -32,6 +34,7 @@
   - [Fronend](#fronend)
   - [Backend](#backend)
   - [База данных](#база-данных)
+    - [NextGIS](#nextgis)
   - [Nginx](#nginx)
 - [Стек Nifi](#стек-nifi)
   - [Nifi](#nifi)
@@ -297,6 +300,37 @@ use a virtual environment instead: https://pip.pypa.io/warnings/venv
 Также не забудьте создать необходимые директории для привязки постоянного
 хранилища к `Docker`. Все необходимые команды прописаны в
 [EnvironmentWiki][4]
+
+Общее замечание, когда вы создаёте объект, а особенно схему, давайте сразу
+права необходимым участникам.
+
+![PGAdminRights](doc/img/pgadmin_rights.jpg)
+
+#### NextGIS
+
+Так же вам понадобиться прослойка таблиц c данными из [NextGIS][9].
+
+> TODO: В общем эти данные должны подгружаться через `ETL` частично с
+> обращением к `Overpass`, но пока грузим в ручную; Необходимо разработать
+> механизм загрузки данных из `Overpass` и `NextGIS` через `Nifi`
+
+Закажите необходимые данные на сайте [NextGIS][10]. Имя файла будет в формате
+`RU-[A-Z]{3}-[a-z0-9]{8}-[a-z0-9]{8}-ru-postgresql.zip`. Перенестите архив
+с помощью `scp` на хостинг в папку `postgres/data` локального проекта
+`NorthGateSwarm`. Разархивируйте папку, так как на контейнере нет утилиты
+`unzip`. Далее с помощью `docker cp` в контейнер базы. Подключитесь к
+контейнеру. Ваш пользователь от базы должен быть выдан вам ответственным за
+инфраструтуру.
+
+```sh
+cd postgres/data
+unzip [arch_name].zip
+PG_CONT=$(sudo docker ps --filter "name=db_postgres" -q)
+sudo docker cp . $PG_CONT:/tmp/
+sudo docker exec -it $PG_CONT /bin/bash
+cd /tmp
+ls -1 . | grep .sql | xargs -L1 psql -d northgate -U [user] -f
+```
 
 ### Nginx
 
@@ -588,3 +622,5 @@ git push >> /opt/nifi/push.log 2>&1
 [6]: https://nifi.apache.org/docs/nifi-docs/
 [7]: https://jdbc.postgresql.org/download/
 [8]: https://avro.apache.org/docs/1.11.1/specification/
+[9]: https://data.nextgis.com
+[10]: https://data.nextgis.com/en/catalog/subdivisions?country=RU
