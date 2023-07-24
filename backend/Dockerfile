@@ -1,5 +1,5 @@
 # Очень хорошо, что зафиксировали версию!
-FROM python:3.9
+FROM python:3.10
 
 ENV PYTHONUNBUFFERED 1
 
