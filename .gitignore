@@ -10,6 +10,7 @@ nginx/certs/
 frontend/package.json
 frontend/package-lock.json
 backend/prod.txt
+nifi/*.jar
 postgres/data
 
 # Byte-compiled / optimized / DLL files
