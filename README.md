@@ -213,6 +213,8 @@ DB_USER=vasya
 DB_PASSWORD=vasya123
 PGADMIN_EMAIL=vasya@mail.ru
 PGADMIN_PASSWORD=vasya123
+YANDEX_KEY=KEY
+YANDEX_URL=URL
 ```
 
 Затем запустите файл `secrets.sh` с `sudo` передав его как параметр команде
@@ -230,14 +232,14 @@ PGADMIN_PASSWORD=vasya123
 
 ### Fronend
 
-Для фронтенда скачайте репозиторий с кодом в папку `/opt/frontend`. На данном
+Для фронтенда скачайте репозиторий с кодом в папку `/opt/repos/NorthGateWeb`. На данном
 этапе вы можете сделать это с помощью `git clone`. Скопируйте из скаченного
 проекта следующие файлы: `package.json` и `package-lock.json` в папку
 `frontend/` в данном репозитории:
 
 ```sh
-cp /opt/frontend/package.json .
-cp /opt/frontend/package-lock.json .
+cp /opt/repos/NorthGateWeb/package.json .
+cp /opt/repos/NorthGateWeb/package-lock.json .
 ```
 
 Запустите сборку и загрузку: `sudo bash deploy.sh`.
@@ -262,12 +264,12 @@ npm notice
 При работе необходимо учесть то, что в `docker-compose.yml` используются
 `Docker secrets`, о чём описано выше.
 
-Скачайте репозиторий с кодом в папку `/opt/backend`. На данном
+Скачайте репозиторий с кодом в папку `/opt/repos/NorthGateBackend`. На данном
 этапе вы можете сделать это с помощью `git clone`. Скопируйте из скаченного
 проекта файл `requirements/prod.txt` в папку `backend/` в данном репозитории.
 
 ```sh
-cp /opt/backend/requirements/prod.txt .
+cp /opt/repos/NorthGateBackend/requirements/prod.txt .
 ```
 
 > TODO: разобраться со следующим предупреждением во время сборки образа:

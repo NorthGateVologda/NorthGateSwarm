@@ -6,9 +6,9 @@ services:
       - global.env
       - backend.env
     volumes:
-      - /opt/backend/apps:/backend/apps
-      - /opt/backend/config:/backend/config
-      - /opt/backend/manage.py:/backend/manage.py
+      - /opt/repos/NorthGateBackend/api:/backend/api
+      - /opt/repos/NorthGateBackend/config:/backend/config
+      - /opt/repos/NorthGateBackend/manage.py:/backend/manage.py
     ports:
       - "8000:8000"
     hostname: backend
@@ -22,6 +22,8 @@ services:
       - BACKEND_DB_HOST=/run/secrets/BACKEND_DB_HOST
       - BACKEND_DB_PORT=/run/secrets/BACKEND_DB_PORT
       - BACKEND_ENVIRONMENT=/run/secrets/BACKEND_ENVIRONMENT
+      - YANDEX_KEY=/run/secrets/YANDEX_KEY
+      - YANDEX_URL=/run/secrets/YANDEX_URL
     secrets:
       - BACKEND_SECRET_KEY
       - BACKEND_DB_NAME
@@ -30,6 +32,8 @@ services:
       - BACKEND_DB_HOST
       - BACKEND_DB_PORT
       - BACKEND_ENVIRONMENT
+      - YANDEX_KEY
+      - YANDEX_URL
 networks:
   northgatevologda:
     external: true
@@ -47,4 +51,8 @@ secrets:
   BACKEND_DB_PORT:
     external: true
   BACKEND_ENVIRONMENT:
+    external: true
+  YANDEX_KEY:
+    external: true
+  YANDEX_URL:
     external: true
