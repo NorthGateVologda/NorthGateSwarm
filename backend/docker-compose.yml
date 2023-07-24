@@ -6,9 +6,9 @@ services:
       - global.env
       - backend.env
     volumes:
-      - /opt/backend/api:/backend/api
-      - /opt/backend/config:/backend/config
-      - /opt/backend/manage.py:/backend/manage.py
+      - /opt/repos/NorthGateBackend/api:/backend/api
+      - /opt/repos/NorthGateBackend/config:/backend/config
+      - /opt/repos/NorthGateBackend/manage.py:/backend/manage.py
     ports:
       - "8000:8000"
     hostname: backend
