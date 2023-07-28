@@ -1,0 +1,23 @@
+version: '3.9'
+services:
+  frontend_alpha:
+    image: ng_frontend:latest
+    environment:
+      - WDS_SOCKET_PORT=443
+    volumes:
+      - /opt/repos/NorthGateWeb_alpha/src:/app/src
+      - /opt/repos/NorthGateWeb_alpha/public:/app/public
+      # Старайтесь избегать анонимных томов
+      # Они плодятся а потом теряются с командой
+      # docker volume prune
+      - modules:/app/node_modules
+    ports:
+      - "3000:3000"
+    hostname: frontend_alpha
+    networks:
+      - northgatevologda
+volumes:
+  modules:
+networks:
+  northgatevologda:
+    external: true
