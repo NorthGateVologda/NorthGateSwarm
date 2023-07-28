@@ -11,7 +11,7 @@ services:
       - /opt/repos/NorthGateBackend/manage.py:/backend/manage.py
     ports:
       - "8000:8000"
-    hostname: backend
+    hostname: api.northgatevologda.ru
     networks:
       - northgatevologda
     environment:
