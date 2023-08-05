@@ -3,7 +3,7 @@ services:
   frontend:
     image: ng_frontend:latest
     environment:
-      - WDS_SOCKET_PORT=80
+      - WDS_SOCKET_PORT=3000
     volumes:
       - /opt/repos/NorthGateWeb/src:/app/src
       - /opt/repos/NorthGateWeb/public:/app/public
