@@ -6,12 +6,12 @@ services:
       - global.env
       - backend.env
     volumes:
-      - /opt/repos/NorthGateBackend/api:/backend/api
-      - /opt/repos/NorthGateBackend/config:/backend/config
-      - /opt/repos/NorthGateBackend/manage.py:/backend/manage.py
+      - /opt/repos/NorthGateBackend_alpha/api:/backend/api
+      - /opt/repos/NorthGateBackend_alpha/config:/backend/config
+      - /opt/repos/NorthGateBackend_alpha/manage.py:/backend/manage.py
     ports:
-      - "8000:8000"
-    hostname: backend_alpha
+      - "8001:8000"
+    hostname: api.northgatevologda.ru
     networks:
       - northgatevologda
     environment:
